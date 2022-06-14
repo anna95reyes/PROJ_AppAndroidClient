@@ -2,7 +2,9 @@ package com.example.appandroidclient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
@@ -12,6 +14,8 @@ import com.example.appandroidclient.databinding.ActivityMainBinding;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -21,12 +25,13 @@ import java.security.NoSuchAlgorithmException;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-
-    private DataInputStream dis;
-    private DataOutputStream dos;
+    private ObjectInputStream ois;
+    private ObjectOutputStream oos;
     private Socket socket;
+    private String ip = "192.168.1.103";
     private Integer port = 5056;
-    private String login = null;
+    private String loginTocken;
+    private ThreadLogin threadLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,53 +47,63 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                socketLogin();
-
+                threadLogin = new ThreadLogin();
+                new Thread(threadLogin).start();
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (loginTocken != null){
+                    Intent intent = new Intent(MainActivity.this, LlistaTasquesActivity.class);
+                    intent.putExtra("token", loginTocken);
+                    startActivity(intent);
+                }
             }
         });
 
 
     }
 
-    private void socketLogin(){
-        try {
 
-            Log.d("APP", "PASO 1");
+    private class ThreadLogin implements Runnable {
 
-            InetAddress ip = InetAddress.getByName("localhost");
-            Log.d("APP", "PASO 2");
-            socket = new Socket(ip, port);
-            Log.d("APP", "PASO 3");
-            dis = new DataInputStream(socket.getInputStream());
-            dos = new DataOutputStream(socket.getOutputStream());
-            Log.d("APP", "PASO 4");
-            dos.writeInt(1);
-            dos.writeUTF(binding.edtLogin.getText().toString());
-            dos.writeUTF(hashMD5(binding.edtPassword.getText().toString()));
+        @Override
+        public void run() {
 
-            login = dis.readUTF();
-            if (!login.equals("")) {
-                Log.d("APP", "LOGIN: " + login);
-                binding.edtLogin.setBackgroundColor(Color.parseColor("#00FFFFFF"));
-                binding.edtPassword.setBackgroundColor(Color.parseColor("#00FFFFFF"));
-            } else {
-                binding.edtLogin.setBackgroundColor(Color.parseColor("#FFAFAF"));
-                binding.edtPassword.setBackgroundColor(Color.parseColor("#FFAFAF"));
+            try {
+                //InetAddress ip = InetAddress.getByName("localhost");
+                socket = new Socket(ip, port);
+
+                oos = new ObjectOutputStream(socket.getOutputStream());
+                ois = new ObjectInputStream(socket.getInputStream());
+
+                oos.writeObject(1);
+                oos.writeObject(binding.edtLogin.getText().toString());
+                oos.writeObject(hashMD5(binding.edtPassword.getText().toString()));
+
+                String login = (String)ois.readObject();
+                if (!login.equals("")) {
+                    Log.d("APP", "LOGIN: " + login);
+                    loginTocken = login;
+                    Log.d("APP", "loginTocken: " + loginTocken);
+
+                } else {
+                    Log.d("APP", "Usuari o contrasenya incorrectes");
+                    loginTocken = null;
+                    Log.d("APP", "loginTocken: " + loginTocken);
+                    //binding.edtLogin.setBackgroundColor(Color.RED);
+                    //binding.edtPassword.setBackgroundColor(Color.RED);
+                }
+                oos.writeObject(-1);
+                Log.d("APP", "Tancant aquesta connexió : " + socket);
+                socket.close();
+                Log.d("APP", "Connexió tancada");
+
+            } catch(Exception e){
+
+                Log.d("APP", "SOCKET");
             }
-
-
-
-
-            dos.writeInt(-1);
-
-            Log.d("APP", "Tancant aquesta connexió : " + socket);
-            socket.close();
-            Log.d("APP", "Connexió tancada");
-
-
-        } catch(Exception e){
-
-            Log.d("APP", "SOCKET");
         }
     }
 

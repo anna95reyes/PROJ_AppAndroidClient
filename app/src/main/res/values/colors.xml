@@ -10,4 +10,6 @@
     <color name="button">#CAC6C6</color>
     <color name="red">#FFAFAF</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="blue">#83C8FF</color>
+    <color name="light_blue">#BBE1FF</color>
 </resources>
