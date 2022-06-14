@@ -9,33 +9,33 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.appandroidclient.MainActivity;
 import com.example.appandroidclient.R;
 
 import org.milaifontanals.model.Projecte;
+import org.milaifontanals.model.Tasca;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 
-public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHolder> {
-
-    private List<Projecte> mProjectesList;
+public class TascaAssignadaAdapter extends RecyclerView.Adapter<TascaAssignadaAdapter.ViewHolder> {
+    private List<Tasca> mTasquesAssignadesList;
     private int mPosSeleccionada = -1;
-    private ThreadProjectes threadProjectes;
+    private ThreadTasquesAssignades threadTasquesAssignades;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
     private Socket socket;
     private String ip = "192.168.1.103";
     private Integer port = 5056;
     private String loginTocken;
+    private Integer projecteId;
 
-    public ProjecteAdapter(String loginTocken) {
+    public TascaAssignadaAdapter (String loginTocken, Integer projecteId){
         this.loginTocken = loginTocken;
-        threadProjectes = new ThreadProjectes();
-        new Thread(threadProjectes).start();
+        this.projecteId = projecteId;
+        threadTasquesAssignades = new ThreadTasquesAssignades();
+        new Thread(threadTasquesAssignades).start();
         try {
             Thread.sleep(300);
         } catch (InterruptedException e) {
@@ -46,7 +46,7 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View fila = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_projecte, parent, false);
+        View fila = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_tasques, parent, false);
         ViewHolder vh = new ViewHolder(fila);
         //Tinc acces a la fila i puc programar esdeveniment
         fila.setOnClickListener(new View.OnClickListener() {
@@ -71,26 +71,29 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Projecte p = mProjectesList.get(position);
-        holder.txvNom.setText(p.getNom());
+        Tasca t = mTasquesAssignadesList.get(position);
+        holder.txvNom.setText(t.getNom());
+        holder.txvDesc.setText(t.getDescripcio());
     }
 
     @Override
     public int getItemCount() {
-        return mProjectesList.size();
+        return mTasquesAssignadesList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView txvNom;
+        public TextView txvDesc;
 
         public ViewHolder(@NonNull View fila) {
             super(fila);
             txvNom =  fila.findViewById(R.id.txvNom);
+            txvDesc =  fila.findViewById(R.id.txvDesc);
         }
     }
 
-    private class ThreadProjectes implements Runnable {
+    private class ThreadTasquesAssignades implements Runnable {
 
         @Override
         public void run() {
@@ -102,11 +105,12 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
 
-                oos.writeObject(2);
+                oos.writeObject(3);
                 oos.writeObject(loginTocken);
-                mProjectesList = (List<Projecte>)ois.readObject();
+                oos.writeObject(projecteId);
+                List<Tasca> tasquesAssignades = (List<Tasca>)ois.readObject();
 
-                Log.d("APP", "mProjectesList: " + mProjectesList);
+                Log.d("APP", "tasquesAssignades: " + tasquesAssignades);
 
                 oos.writeObject(-1);
                 Log.d("APP", "Tancant aquesta connexió : " + socket);
@@ -119,4 +123,6 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
             }
         }
     }
+
+
 }

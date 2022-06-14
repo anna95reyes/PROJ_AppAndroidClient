@@ -4,9 +4,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:background="@color/blue">
 
         <TextView android:id="@+id/txvNom"
@@ -17,5 +18,13 @@
             android:textSize="20dp"
             android:textStyle="bold"/>
 
-    </RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcyTasquesAssignades"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
 </LinearLayout>
