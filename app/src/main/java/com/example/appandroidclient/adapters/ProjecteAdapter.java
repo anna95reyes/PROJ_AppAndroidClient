@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appandroidclient.MainActivity;
@@ -73,6 +74,7 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Projecte p = mProjectesList.get(position);
         holder.txvNom.setText(p.getNom());
+
     }
 
     @Override
@@ -83,10 +85,12 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView txvNom;
+        public RecyclerView rcyTasquesAssignades;
 
         public ViewHolder(@NonNull View fila) {
             super(fila);
             txvNom =  fila.findViewById(R.id.txvNom);
+            rcyTasquesAssignades = fila.findViewById(R.id.rcyTasquesAssignades);
         }
     }
 
