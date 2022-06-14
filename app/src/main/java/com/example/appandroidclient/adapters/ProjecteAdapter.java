@@ -33,6 +33,8 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
     private Integer port = 5056;
     private String loginTocken;
 
+    private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
+
     public ProjecteAdapter(String loginTocken) {
         this.loginTocken = loginTocken;
         threadProjectes = new ThreadProjectes();
@@ -73,7 +75,22 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Projecte p = mProjectesList.get(position);
+        holder.txvId.setText(p.getId().toString());
         holder.txvNom.setText(p.getNom());
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(
+                holder.rcyTasquesAssignades.getContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+        );
+
+        layoutManager.setInitialPrefetchItemCount(p.getSizeTasques());
+
+        TascaAssignadaAdapter tascaAssignadaAdapter = new TascaAssignadaAdapter(loginTocken, p.getId());
+
+        holder.rcyTasquesAssignades.setLayoutManager(layoutManager);
+        holder.rcyTasquesAssignades.setAdapter(tascaAssignadaAdapter);
+        holder.rcyTasquesAssignades.setRecycledViewPool(viewPool);
 
     }
 
@@ -84,11 +101,13 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        public TextView txvId;
         public TextView txvNom;
         public RecyclerView rcyTasquesAssignades;
 
         public ViewHolder(@NonNull View fila) {
             super(fila);
+            txvId =  fila.findViewById(R.id.txvId);
             txvNom =  fila.findViewById(R.id.txvNom);
             rcyTasquesAssignades = fila.findViewById(R.id.rcyTasquesAssignades);
         }

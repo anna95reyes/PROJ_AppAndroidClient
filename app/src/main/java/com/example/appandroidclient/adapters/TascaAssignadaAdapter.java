@@ -73,6 +73,9 @@ public class TascaAssignadaAdapter extends RecyclerView.Adapter<TascaAssignadaAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Tasca t = mTasquesAssignadesList.get(position);
         holder.txvNom.setText(t.getNom());
+        if (t.getDescripcio() != null) {
+            holder.txvSeparador.setText(" - ");
+        }
         holder.txvDesc.setText(t.getDescripcio());
     }
 
@@ -84,11 +87,13 @@ public class TascaAssignadaAdapter extends RecyclerView.Adapter<TascaAssignadaAd
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView txvNom;
+        public TextView txvSeparador;
         public TextView txvDesc;
 
         public ViewHolder(@NonNull View fila) {
             super(fila);
             txvNom =  fila.findViewById(R.id.txvNom);
+            txvSeparador = fila.findViewById(R.id.txvSeparador);
             txvDesc =  fila.findViewById(R.id.txvDesc);
         }
     }
@@ -108,9 +113,9 @@ public class TascaAssignadaAdapter extends RecyclerView.Adapter<TascaAssignadaAd
                 oos.writeObject(3);
                 oos.writeObject(loginTocken);
                 oos.writeObject(projecteId);
-                List<Tasca> tasquesAssignades = (List<Tasca>)ois.readObject();
+                mTasquesAssignadesList = (List<Tasca>)ois.readObject();
 
-                Log.d("APP", "tasquesAssignades: " + tasquesAssignades);
+                Log.d("APP", "mTasquesAssignadesList: " + mTasquesAssignadesList);
 
                 oos.writeObject(-1);
                 Log.d("APP", "Tancant aquesta connexió : " + socket);
