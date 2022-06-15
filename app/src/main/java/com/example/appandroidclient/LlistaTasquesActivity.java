@@ -42,7 +42,6 @@ public class LlistaTasquesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLlistaTasquesBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        // setContentView(R.layout.activity_llista_tasques);
 
         loginTocken = this.getIntent().getExtras().getString("token");
 

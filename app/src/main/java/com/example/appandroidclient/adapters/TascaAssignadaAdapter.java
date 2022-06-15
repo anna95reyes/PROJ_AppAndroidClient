@@ -58,6 +58,7 @@ public class TascaAssignadaAdapter extends RecyclerView.Adapter<TascaAssignadaAd
                         notifyItemChanged(mPosSeleccionada);
                     }
                     mPosSeleccionada = pos;
+                    Log.d("APP", "CAMBIAR PAGINA POS:" + mPosSeleccionada);
                     notifyItemChanged(mPosSeleccionada);
                 } else {
                     mPosSeleccionada = -1;

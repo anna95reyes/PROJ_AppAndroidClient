@@ -61,6 +61,7 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
                         notifyItemChanged(mPosSeleccionada);
                     }
                     mPosSeleccionada = pos;
+                    Log.d("APP", "M'han clicat POS: " + mPosSeleccionada);
                     notifyItemChanged(mPosSeleccionada);
                 } else {
                     mPosSeleccionada = -1;
