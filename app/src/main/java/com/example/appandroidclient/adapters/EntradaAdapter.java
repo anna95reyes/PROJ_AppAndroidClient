@@ -1,8 +1,5 @@
 package com.example.appandroidclient.adapters;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,50 +9,44 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.appandroidclient.LlistaTasquesActivity;
-import com.example.appandroidclient.MainActivity;
 import com.example.appandroidclient.R;
-import com.example.appandroidclient.TascaAmbEntradesActivity;
 
-import org.milaifontanals.model.Projecte;
-import org.milaifontanals.model.Tasca;
+import org.milaifontanals.model.Entrada;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
-public class TascaAssignadaAdapter extends RecyclerView.Adapter<TascaAssignadaAdapter.ViewHolder> {
-    private List<Tasca> mTasquesAssignadesList;
+public class EntradaAdapter extends RecyclerView.Adapter<EntradaAdapter.ViewHolder> {
+
+    private List<Entrada> mEntrades;
     private int mPosSeleccionada = -1;
-    private ThreadTasquesAssignades threadTasquesAssignades;
+    private ThreadEntrades threadEntrades;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
     private Socket socket;
     private String ip = "192.168.1.103";
     private Integer port = 5056;
     private String loginTocken;
-    private Integer estatId;
-    private Integer projecteId;
+    private Integer idTasca;
 
-    public TascaAssignadaAdapter (String loginTocken, Integer estatId, Integer projecteId){
+    public EntradaAdapter (String loginTocken, Integer idTasca){
         this.loginTocken = loginTocken;
-        this.estatId = estatId;
-        this.projecteId = projecteId;
-        threadTasquesAssignades = new ThreadTasquesAssignades();
-        new Thread(threadTasquesAssignades).start();
+        this.idTasca = idTasca;
+        threadEntrades = new ThreadEntrades();
+        new Thread(threadEntrades).start();
         try {
-            Thread.sleep(200);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View fila = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_tasques, parent, false);
+        View fila = LayoutInflater.from(parent.getContext()).inflate(R.layout.fila_entrades, parent, false);
         ViewHolder vh = new ViewHolder(fila);
         //Tinc acces a la fila i puc programar esdeveniment
         fila.setOnClickListener(new View.OnClickListener() {
@@ -80,50 +71,35 @@ public class TascaAssignadaAdapter extends RecyclerView.Adapter<TascaAssignadaAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Tasca t = mTasquesAssignadesList.get(position);
-        holder.txvNom.setText(t.getNom());
-        if (t.getDescripcio() != null) {
-            holder.txvSeparador.setText(" - ");
-        }
-        holder.txvDesc.setText(t.getDescripcio());
-
-        if (mPosSeleccionada != -1){
-            holder.setOnClickListeners(loginTocken, t.getId());
-        }
-
+        Entrada entrada = mEntrades.get(position);
+        holder.txvNum.setText(entrada.getNumero().toString());
+        holder.txvData.setText(entrada.getDataFormatada());
+        holder.txvEstat.setText(entrada.getNouEstat().getNom());
+        holder.txvEntrada.setText(entrada.getEntrada());
     }
 
     @Override
     public int getItemCount() {
-        return mTasquesAssignadesList.size();
+        return mEntrades.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView txvNom;
-        public TextView txvSeparador;
-        public TextView txvDesc;
-        private Context context;
+        public TextView txvNum;
+        public TextView txvData;
+        public TextView txvEstat;
+        public TextView txvEntrada;
 
         public ViewHolder(@NonNull View fila) {
             super(fila);
-            txvNom =  fila.findViewById(R.id.txvNom);
-            txvSeparador = fila.findViewById(R.id.txvSeparador);
-            txvDesc =  fila.findViewById(R.id.txvDesc);
-            context = fila.getContext();
-        }
-
-        public void setOnClickListeners(String loginTocken, Integer idTasca) {
-            Bundle parametres = new Bundle();
-
-            Intent intent = new Intent(context, TascaAmbEntradesActivity.class);
-            intent.putExtra("token", loginTocken);
-            intent.putExtra("tasca", idTasca.toString());
-            context.startActivity(intent);
+            txvNum = fila.findViewById(R.id.txvNum);
+            txvData = fila.findViewById(R.id.txvData);
+            txvEstat = fila.findViewById(R.id.txvEstat);
+            txvEntrada = fila.findViewById(R.id.txvEntrada);
         }
     }
 
-    private class ThreadTasquesAssignades implements Runnable {
+    private class ThreadEntrades implements Runnable {
 
         @Override
         public void run() {
@@ -135,13 +111,12 @@ public class TascaAssignadaAdapter extends RecyclerView.Adapter<TascaAssignadaAd
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
 
-                oos.writeObject(3);
+                oos.writeObject(6);
                 oos.writeObject(loginTocken);
-                oos.writeObject(estatId);
-                oos.writeObject(projecteId);
-                mTasquesAssignadesList = (List<Tasca>)ois.readObject();
+                oos.writeObject(idTasca);
+                mEntrades = (List<Entrada>)ois.readObject();
 
-                Log.d("APP", "mTasquesAssignadesList: " + mTasquesAssignadesList);
+                Log.d("APP", "mEntrades: " + mEntrades);
 
                 oos.writeObject(-1);
                 Log.d("APP", "Tancant aquesta connexió : " + socket);
@@ -154,5 +129,4 @@ public class TascaAssignadaAdapter extends RecyclerView.Adapter<TascaAssignadaAd
             }
         }
     }
-
 }

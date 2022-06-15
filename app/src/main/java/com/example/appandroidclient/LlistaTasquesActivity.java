@@ -3,8 +3,10 @@ package com.example.appandroidclient;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.example.appandroidclient.adapters.ProjecteAdapter;
@@ -45,19 +47,6 @@ public class LlistaTasquesActivity extends AppCompatActivity {
 
         loginTocken = this.getIntent().getExtras().getString("token");
 
-        binding.rcyProjectes.setLayoutManager(new LinearLayoutManager(this));
-
-        mProjecteAdapter = new ProjecteAdapter(loginTocken);
-        binding.rcyProjectes.setAdapter(mProjecteAdapter);
-
-        threadProjectes = new ThreadProjectes();
-        new Thread(threadProjectes).start();
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         spinnerProjectes.add("Tots els projectes");
         for (Projecte proj: projectes) {
             spinnerProjectes.add(proj.getNom());
@@ -83,6 +72,26 @@ public class LlistaTasquesActivity extends AppCompatActivity {
 
         binding.spnFiltreEstats.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerEstat));
         binding.spnFiltreEstats.setSelection(5);
+
+        binding.btnFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: fer el filtre
+            }
+        });
+
+        binding.rcyProjectes.setLayoutManager(new LinearLayoutManager(this));
+
+        mProjecteAdapter = new ProjecteAdapter(loginTocken);
+        binding.rcyProjectes.setAdapter(mProjecteAdapter);
+
+        threadProjectes = new ThreadProjectes();
+        new Thread(threadProjectes).start();
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 

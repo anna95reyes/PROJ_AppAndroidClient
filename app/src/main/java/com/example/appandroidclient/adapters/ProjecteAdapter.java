@@ -1,10 +1,12 @@
 package com.example.appandroidclient.adapters;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -61,7 +63,6 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
                         notifyItemChanged(mPosSeleccionada);
                     }
                     mPosSeleccionada = pos;
-                    Log.d("APP", "M'han clicat POS: " + mPosSeleccionada);
                     notifyItemChanged(mPosSeleccionada);
                 } else {
                     mPosSeleccionada = -1;
@@ -87,11 +88,12 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
 
         layoutManager.setInitialPrefetchItemCount(p.getSizeTasques());
 
-        TascaAssignadaAdapter tascaAssignadaAdapter = new TascaAssignadaAdapter(loginTocken, p.getId());
+        TascaAssignadaAdapter tascaAssignadaAdapter = new TascaAssignadaAdapter(loginTocken, 5, p.getId());
 
         holder.rcyTasquesAssignades.setLayoutManager(layoutManager);
         holder.rcyTasquesAssignades.setAdapter(tascaAssignadaAdapter);
         holder.rcyTasquesAssignades.setRecycledViewPool(viewPool);
+
 
     }
 
