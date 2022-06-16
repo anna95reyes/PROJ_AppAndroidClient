@@ -3,6 +3,7 @@ package com.example.appandroidclient;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -69,6 +70,18 @@ public class TascaAmbEntradesActivity extends AppCompatActivity {
 
         mEntradaAdapter = new EntradaAdapter(loginTocken, idTasca);
         binding.rcyEntrades.setAdapter(mEntradaAdapter);
+
+        binding.btnNovaEntrada.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TascaAmbEntradesActivity.this, NovaEntradaActivity.class);
+                intent.putExtra("token", loginTocken);
+                intent.putExtra("estat", "nou");
+                intent.putExtra("idTasca", idTasca.toString());
+                intent.putExtra("idEntrada", "-1");
+                startActivity(intent);
+            }
+        });
 
     }
 

@@ -54,7 +54,6 @@ public class LlistaTasquesActivity extends AppCompatActivity {
 
         binding.spnFiltreProjecte.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerProjectes));
 
-
         threadEstats = new ThreadEstats();
         new Thread(threadEstats).start();
         try {

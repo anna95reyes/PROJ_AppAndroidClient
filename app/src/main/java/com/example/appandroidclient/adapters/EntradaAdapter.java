@@ -1,5 +1,8 @@
 package com.example.appandroidclient.adapters;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.appandroidclient.NovaEntradaActivity;
 import com.example.appandroidclient.R;
 
 import org.milaifontanals.model.Entrada;
@@ -31,13 +35,13 @@ public class EntradaAdapter extends RecyclerView.Adapter<EntradaAdapter.ViewHold
     private String loginTocken;
     private Integer idTasca;
 
-    public EntradaAdapter (String loginTocken, Integer idTasca){
+    public EntradaAdapter(String loginTocken, Integer idTasca){
         this.loginTocken = loginTocken;
         this.idTasca = idTasca;
         threadEntrades = new ThreadEntrades();
         new Thread(threadEntrades).start();
         try {
-            Thread.sleep(300);
+            Thread.sleep(600);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -74,8 +78,14 @@ public class EntradaAdapter extends RecyclerView.Adapter<EntradaAdapter.ViewHold
         Entrada entrada = mEntrades.get(position);
         holder.txvNum.setText(entrada.getNumero().toString());
         holder.txvData.setText(entrada.getDataFormatada());
-        holder.txvEstat.setText(entrada.getNouEstat().getNom());
+        if (entrada.getNouEstat() != null) {
+            holder.txvEstat.setText(entrada.getNouEstat().getNom());
+        }
         holder.txvEntrada.setText(entrada.getEntrada());
+
+        if (mPosSeleccionada != -1){
+            holder.setOnClickListeners(loginTocken, idTasca, entrada.getNumero());
+        }
     }
 
     @Override
@@ -89,6 +99,7 @@ public class EntradaAdapter extends RecyclerView.Adapter<EntradaAdapter.ViewHold
         public TextView txvData;
         public TextView txvEstat;
         public TextView txvEntrada;
+        private Context context;
 
         public ViewHolder(@NonNull View fila) {
             super(fila);
@@ -96,6 +107,18 @@ public class EntradaAdapter extends RecyclerView.Adapter<EntradaAdapter.ViewHold
             txvData = fila.findViewById(R.id.txvData);
             txvEstat = fila.findViewById(R.id.txvEstat);
             txvEntrada = fila.findViewById(R.id.txvEntrada);
+            context = fila.getContext();
+        }
+
+        public void setOnClickListeners(String loginTocken, Integer idTasca, Integer idEntrada) {
+            Bundle parametres = new Bundle();
+
+            Intent intent = new Intent(context, NovaEntradaActivity.class);
+            intent.putExtra("token", loginTocken);
+            intent.putExtra("estat", "editar");
+            intent.putExtra("idTasca", idTasca.toString());
+            intent.putExtra("idEntrada", idEntrada.toString());
+            context.startActivity(intent);
         }
     }
 

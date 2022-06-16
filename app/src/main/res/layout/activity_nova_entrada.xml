@@ -4,38 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TascaAmbEntradesActivity"
+    tools:context=".NovaEntradaActivity"
     android:background="@drawable/bacground"
     android:orientation="vertical">
-
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ImageButton android:id="@+id/btnPullBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:src="@drawable/back"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Tasca"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:gravity="center"/>
-
-    </LinearLayout>
+        android:layout_margin="30dp"
+        android:text="Entrada"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:gravity="center"/>
 
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_margin="10dp">
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,13 +31,14 @@
             android:layout_column="0"
             android:layout_rowWeight="1"
             android:layout_margin="10dp"
-            android:text="Id: "
+            android:text="Data: "
             android:textSize="12dp"
             android:layout_gravity="right"
             android:textStyle="bold"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:gravity="center_vertical"/>
 
-        <TextView android:id="@+id/tvxIdTasca"
+        <TextView android:id="@+id/tvxDataEntrada"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_row="0"
@@ -58,7 +46,8 @@
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:textSize="12dp"/>
+            android:textSize="12dp"
+            android:gravity="center_vertical"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -67,21 +56,23 @@
             android:layout_column="0"
             android:layout_rowWeight="1"
             android:layout_margin="10dp"
-            android:text="Data de creació: "
+            android:text="Entrada: "
             android:textSize="12dp"
             android:layout_gravity="right"
             android:textStyle="bold"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:gravity="center_vertical"/>
 
-        <TextView android:id="@+id/tvxDataCreacioTasca"
+        <EditText android:id="@+id/edtEntradaEntrada"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_row="1"
             android:layout_column="1"
-            android:layout_rowWeight="1"
+            android:layout_rowWeight="3"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:textSize="12dp"/>
+            android:textSize="12dp"
+            android:gravity="center_vertical"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -90,13 +81,14 @@
             android:layout_column="0"
             android:layout_rowWeight="1"
             android:layout_margin="10dp"
-            android:text="Nom: "
+            android:text="Escrita per: "
             android:textSize="12dp"
             android:layout_gravity="right"
             android:textStyle="bold"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:gravity="center_vertical"/>
 
-        <TextView android:id="@+id/tvxNomTasca"
+        <Spinner android:id="@+id/spnEscritaPer"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_row="2"
@@ -104,7 +96,7 @@
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:textSize="12dp"/>
+            android:gravity="center_vertical"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -113,13 +105,13 @@
             android:layout_column="0"
             android:layout_rowWeight="1"
             android:layout_margin="10dp"
-            android:text="Data limit: "
+            android:text="Nova assignació: "
             android:textSize="12dp"
             android:layout_gravity="right"
             android:textStyle="bold"
             android:textColor="@color/black"/>
 
-        <TextView android:id="@+id/tvxDataLimitTasca"
+        <Spinner android:id="@+id/spnNovaAssignacio"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_row="3"
@@ -127,7 +119,7 @@
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:textSize="12dp"/>
+            android:gravity="center_vertical"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -136,55 +128,53 @@
             android:layout_column="0"
             android:layout_rowWeight="1"
             android:layout_margin="10dp"
-            android:text="Descripcio: "
+            android:text="Estat: "
             android:textSize="12dp"
             android:layout_gravity="right"
             android:textStyle="bold"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:gravity="center_vertical"/>
 
-        <TextView android:id="@+id/tvxDescTasca"
+        <Spinner
+            android:id="@+id/spnEstat"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_row="4"
-            android:layout_column="1"
             android:layout_rowWeight="1"
+            android:layout_column="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:textSize="12dp"/>
+            android:gravity="center_vertical"/>
 
     </GridLayout>
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:layout_weight="5"
-            android:gravity="center_vertical"
-            android:text="Entrades"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-        <ImageButton android:id="@+id/btnNovaEntrada"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/add"/>
-
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcyEntrades"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_margin="5dp">
+        android:orientation="horizontal"
+        android:gravity="bottom">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <ImageButton android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="20dp"
+            android:src="@drawable/save"/>
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"/>
+
+        <ImageButton android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="20dp"
+            android:src="@drawable/cancel"/>
+
+
+    </LinearLayout>
 
 </LinearLayout>
