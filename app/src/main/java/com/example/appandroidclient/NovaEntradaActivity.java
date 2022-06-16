@@ -1,12 +1,17 @@
 package com.example.appandroidclient;
 
-import androidx.appcompat.app.AppCompatActivity;
+import static com.example.appandroidclient.R.*;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
+import com.example.appandroidclient.adapters.EntradaAdapter;
 import com.example.appandroidclient.databinding.ActivityMainBinding;
 import com.example.appandroidclient.databinding.ActivityNovaEntradaBinding;
 
@@ -117,6 +122,8 @@ public class NovaEntradaActivity extends AppCompatActivity {
             binding.tvxDataEntrada.setText(sdf.format(avui));
             binding.spnEscritaPer.setSelection(usuariLoginat.getId());
             binding.spnEscritaPer.setEnabled(false);
+            binding.spnNovaAssignacio.setSelection(0);
+            binding.spnEstat.setSelection(0);
 
         } else if (estat.equals("editar")) {
             binding.tvxDataEntrada.setText(entradaSeleccionada.getDataFormatada());
@@ -305,7 +312,7 @@ public class NovaEntradaActivity extends AppCompatActivity {
                 Log.d("APP", "date: " + new Date());
                 Log.d("APP", "binding.edtEntradaEntrada: " + binding.edtEntradaEntrada.getText().toString());
                 Log.d("APP", "usuariLoginat: " + usuariLoginat);
-                Log.d("APP", "binding.spnNovaAssignacio: " + binding.spnNovaAssignacio.getSelectedItem());
+                Log.d("APP", "binding.spnNovaAssignacio: " + binding.spnNovaAssignacio.getSelectedItemPosition());
                 Log.d("APP", "binding.spnEstat: " + binding.spnEstat.getSelectedItemPosition());
 
 
@@ -347,6 +354,13 @@ public class NovaEntradaActivity extends AppCompatActivity {
 
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
+
+                Log.d("APP", "idEntrada: " + idEntrada);
+                Log.d("APP", "date: " + new Date());
+                Log.d("APP", "binding.edtEntradaEntrada: " + binding.edtEntradaEntrada.getText().toString());
+                Log.d("APP", "usuariLoginat: " + usuariLoginat);
+                Log.d("APP", "binding.spnNovaAssignacio: " + binding.spnNovaAssignacio.getSelectedItemPosition());
+                Log.d("APP", "binding.spnEstat: " + binding.spnEstat.getSelectedItemPosition());
 
                 Entrada entrada = new Entrada(idEntrada, entradaSeleccionada.getData(),
                         binding.edtEntradaEntrada.getText().toString(),
