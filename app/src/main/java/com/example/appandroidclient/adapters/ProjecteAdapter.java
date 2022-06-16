@@ -42,7 +42,7 @@ public class ProjecteAdapter extends RecyclerView.Adapter<ProjecteAdapter.ViewHo
         threadProjectes = new ThreadProjectes();
         new Thread(threadProjectes).start();
         try {
-            Thread.sleep(300);
+            Thread.sleep(600);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

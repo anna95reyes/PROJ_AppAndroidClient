@@ -41,6 +41,7 @@ public class NovaEntradaActivity extends AppCompatActivity {
     private ThreadEstats threadEstats;
     private ThreadEntrada threadEntrada;
     private ThreadNovaEntrada threadNovaEntrada;
+    private ThreadEditarEntrada threadEditarEntrada;
 
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
@@ -149,7 +150,13 @@ public class NovaEntradaActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else if (estat.equals("editar")) {
-
+                    threadEditarEntrada = new ThreadEditarEntrada();
+                    new Thread(threadEditarEntrada).start();
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
                 finish();
             }
@@ -294,18 +301,28 @@ public class NovaEntradaActivity extends AppCompatActivity {
                 oos.writeObject(idTasca);
                 Integer novaEntrada = (Integer)ois.readObject();
 
+                Log.d("APP", "novaEntrada: " + novaEntrada);
+                Log.d("APP", "date: " + new Date());
+                Log.d("APP", "binding.edtEntradaEntrada: " + binding.edtEntradaEntrada.getText().toString());
+                Log.d("APP", "usuariLoginat: " + usuariLoginat);
+                Log.d("APP", "binding.spnNovaAssignacio: " + binding.spnNovaAssignacio.getSelectedItem());
+                Log.d("APP", "binding.spnEstat: " + binding.spnEstat.getSelectedItemPosition());
+
+
                 Entrada entrada = new Entrada(novaEntrada, new Date(), binding.edtEntradaEntrada.getText().toString(),
                         usuariLoginat,
-                        binding.spnNovaAssignacio.getSelectedItem() != null?
+                        binding.spnNovaAssignacio.getSelectedItemPosition() != 0?
                                 usuaris.get(binding.spnNovaAssignacio.getSelectedItemPosition()) : null,
-                        binding.spnEstat.getSelectedItem() != null?
+                        binding.spnEstat.getSelectedItemPosition() != 0?
                                 estats.get(binding.spnEstat.getSelectedItemPosition()) : null);
+
+                Log.d("APP", "NOVA ENTRADA: " + entrada);
 
                 oos.writeObject(11);
                 oos.writeObject(idTasca);
                 oos.writeObject(entrada);
 
-                Log.d("APP", "estats: " + estats);
+                Log.d("APP", "NOVA ENTRADA 2: " + entrada);
 
                 oos.writeObject(-1);
                 Log.d("APP", "Tancant aquesta connexió : " + socket);
@@ -318,4 +335,45 @@ public class NovaEntradaActivity extends AppCompatActivity {
             }
         }
     }
+
+    private class ThreadEditarEntrada implements Runnable {
+
+        @Override
+        public void run() {
+
+            try {
+                //InetAddress ip = InetAddress.getByName("localhost");
+                socket = new Socket(ip, port);
+
+                oos = new ObjectOutputStream(socket.getOutputStream());
+                ois = new ObjectInputStream(socket.getInputStream());
+
+                Entrada entrada = new Entrada(idEntrada, entradaSeleccionada.getData(),
+                        binding.edtEntradaEntrada.getText().toString(),
+                        entradaSeleccionada.getEscriptor(),
+                        binding.spnNovaAssignacio.getSelectedItemPosition() != 0?
+                                usuaris.get(binding.spnNovaAssignacio.getSelectedItemPosition()) : null,
+                        binding.spnEstat.getSelectedItemPosition() != 0?
+                                estats.get(binding.spnEstat.getSelectedItemPosition()) : null);
+
+                Log.d("APP", "EDITAR ENTRADA: " + entrada);
+
+                oos.writeObject(12);
+                oos.writeObject(idTasca);
+                oos.writeObject(entrada);
+
+                Log.d("APP", "EDITAR ENTRADA 2: " + entrada);
+
+                oos.writeObject(-1);
+                Log.d("APP", "Tancant aquesta connexió : " + socket);
+                socket.close();
+                Log.d("APP", "Connexió tancada");
+
+            } catch(Exception e){
+
+                Log.d("APP", "SOCKET");
+            }
+        }
+    }
+
 }

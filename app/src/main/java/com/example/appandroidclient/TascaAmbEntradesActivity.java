@@ -55,7 +55,7 @@ public class TascaAmbEntradesActivity extends AppCompatActivity {
         threadTasca = new ThreadTasca();
         new Thread(threadTasca).start();
         try {
-            Thread.sleep(300);
+            Thread.sleep(1400);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

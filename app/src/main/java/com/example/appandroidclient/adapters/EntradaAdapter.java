@@ -41,7 +41,7 @@ public class EntradaAdapter extends RecyclerView.Adapter<EntradaAdapter.ViewHold
         threadEntrades = new ThreadEntrades();
         new Thread(threadEntrades).start();
         try {
-            Thread.sleep(600);
+            Thread.sleep(900);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
