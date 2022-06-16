@@ -51,7 +51,7 @@ public class NovaEntradaActivity extends AppCompatActivity {
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
     private Socket socket;
-    private String ip = "192.168.1.103";
+    private String ip = "10.175.0.3";
     private Integer port = 5056;
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
